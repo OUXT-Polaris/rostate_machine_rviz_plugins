@@ -1,0 +1,9 @@
+<library path="lib/librostate_machine_rviz_plugins">
+  <class name="rostate_machine_rviz_plugins/RostateMachineViewer"
+         type="rostate_machine_rviz_plugins::RostateMachineViewerPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for watching rostate_machine state
+    </description>
+  </class>
+</library>
