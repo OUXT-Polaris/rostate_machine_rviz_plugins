@@ -25,6 +25,7 @@
 #include <QComboBox>
 #include <QImage>
 #include <QGraphicsView>
+#include <QGraphicsScene>
 
 // Headers in ROS
 #include <ros/master.h>
@@ -32,6 +33,10 @@
 
 // Headers in Graphviz
 #include <graphviz/gvc.h>
+
+// Headers in Boost
+#include <boost/thread.hpp>
+#include <boost/optional.hpp>
 
 namespace rostate_machine_rviz_plugins
 {
@@ -45,9 +50,12 @@ namespace rostate_machine_rviz_plugins
     protected Q_SLOTS:
         void updateTopic(QString text);
     protected:
-        QComboBox* state_topic_combo_;
-        QGraphicsView* state_view_;
+        QComboBox state_topic_combo_;
+        QGraphicsView state_view_;
+        QGraphicsScene Scene_;
     private:
+        boost::thread view_update_thread_;
+        void updateStateView();
         QStringList updateTopicInfo();
         ros::Subscriber dot_string_sub_;
         void dotStringCallback(const std_msgs::String::ConstPtr msg);
@@ -57,7 +65,7 @@ namespace rostate_machine_rviz_plugins
         std::string convertToDotStringTopic(std::string state_topic);
         std::string dot_string_;
         std::mutex mtx_;
-        QImage dot_image_;
+        boost::optional<QImage> dot_image_;
     };
 }
 
