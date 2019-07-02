@@ -38,19 +38,20 @@ namespace rostate_machine_rviz_plugins
 
         setLayout(layout);
         connect(&state_topic_combo_, SIGNAL(activated(QString)), this, SLOT(updateTopic(QString)));
+        
         view_update_thread_ = boost::thread(&RostateMachineViewerPanel::updateStateView, this);
     }
 
     void RostateMachineViewerPanel::updateStateView()
     {
-        ros::Rate rate(30);
+        ros::Rate rate(20);
         while(ros::ok())
         {
             if(dot_image_)
             {
-                mtx_.lock();
+                //mtx_.lock();
                 state_view_.setScene(&Scene_);
-                mtx_.unlock();
+                //mtx_.unlock();
             }
             rate.sleep();
         }
@@ -119,9 +120,20 @@ namespace rostate_machine_rviz_plugins
 
     void RostateMachineViewerPanel::dotStringCallback(const std_msgs::String::ConstPtr msg)
     {
-        mtx_.lock();
+        ROS_ERROR_STREAM("hi");
+        //mtx_.lock();
         dot_string_ = msg->data;
-        mtx_.unlock();
+        std::ofstream outputfile("output.dot");
+        outputfile << dot_string_;
+        outputfile.close();
+        std::system("dot -T png -o output.png output.dot");
+        QImage img;
+        bool result = img.load("output.png");
+        if(result)
+        {
+            dot_image_ = img;
+        }
+        //mtx_.unlock();
     }
 }
 

@@ -20,6 +20,8 @@
 // Headers in STL
 #include <memory>
 #include <mutex>
+#include<iostream>
+#include<fstream>
 
 // Headers in Qt
 #include <QComboBox>
@@ -30,9 +32,6 @@
 // Headers in ROS
 #include <ros/master.h>
 #include <std_msgs/String.h>
-
-// Headers in Graphviz
-#include <graphviz/gvc.h>
 
 // Headers in Boost
 #include <boost/thread.hpp>
