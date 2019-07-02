@@ -22,24 +22,36 @@ namespace rostate_machine_rviz_plugins
 {
     RostateMachineViewerPanel::RostateMachineViewerPanel(QWidget* parent)
     {
-        QVBoxLayout* layout = new QVBoxLayout;
+        QVBoxLayout layout;
 
-        QHBoxLayout* topic_layout = new QHBoxLayout;
-        topic_layout->addWidget(new QLabel("State Topic:"));
+        QHBoxLayout topic_layout;
+        topic_layout.addWidget(new QLabel("State Topic:"));
         QStringList topic_lists = updateTopicInfo();
-        state_topic_combo_ = new QComboBox;
-        state_topic_combo_->addItems(topic_lists);
-        topic_layout->addWidget(state_topic_combo_);
-        layout->addLayout(topic_layout);
+        state_topic_combo_.addItems(topic_lists);
+        topic_layout.addWidget(&state_topic_combo_);
+        layout.addLayout(&topic_layout);
 
-        QVBoxLayout* state_view_layout = new QVBoxLayout;
-        state_view_ = new QGraphicsView;
-        state_view_layout->addWidget(state_view_);
-        state_view_layout->addWidget(new QLabel("State"));
-        layout->addLayout(state_view_layout);
+        QVBoxLayout state_view_layout;
+        state_view_layout.addWidget(&state_view_);
+        state_view_layout.addWidget(new QLabel("State"));
+        layout.addLayout(&state_view_layout);
 
-        setLayout(layout);
-        connect(state_topic_combo_, SIGNAL(activated(QString)), this, SLOT(updateTopic(QString)));
+        setLayout(&layout);
+        connect(&state_topic_combo_, SIGNAL(activated(QString)), this, SLOT(updateTopic(QString)));
+    }
+
+    void RostateMachineViewerPanel::updateStateView()
+    {
+        ros::Rate rate(30);
+        while(ros::ok())
+        {
+            if(dot_image_)
+            {
+                mtx_.lock();
+                mtx_.unlock();
+            }
+            rate.sleep();
+        }
     }
 
     QStringList RostateMachineViewerPanel::updateTopicInfo()
