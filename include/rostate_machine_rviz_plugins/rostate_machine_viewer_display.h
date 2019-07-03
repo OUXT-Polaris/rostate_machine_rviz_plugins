@@ -26,9 +26,17 @@
 
 // Headers in Rviz
 #include <rviz/properties/ros_topic_property.h>
+#include <rviz/properties/int_property.h>
+#include <rviz/properties/float_property.h>
 
 // Headers in STL
 #include <memory>
+
+// Headers in Boost
+#include <boost/circular_buffer.hpp>
+
+// Headers in OpenCV
+#include <opencv2/opencv.hpp>
 
 namespace rostate_machine_rviz_plugins
 {
@@ -43,18 +51,32 @@ namespace rostate_machine_rviz_plugins
         virtual void reset();
     protected Q_SLOTS:
         virtual void updateTopic();
+        virtual void updateTop();
+        virtual void updateLeft();
+        virtual void updateAlpha();
     protected:
         // overrides from Display
         virtual void onEnable();
         virtual void onDisable();
         virtual void processMessage(const rostate_machine::State::ConstPtr& msg);
         rviz::RosTopicProperty* topic_property_;
+        rviz::IntProperty* left_property_;
+        rviz::IntProperty* top_property_;
+        rviz::FloatProperty* alpha_property_;
+        int left_, top_;
+        double alpha_;
     private:
         ros::NodeHandle nh_;
         ros::Subscriber state_sub_;
         std::vector<std::string> split(const std::string &s,char delim);
         std::string convertToXmlParam(std::string state_topic);
         std::unique_ptr<StateMachine> state_machine_ptr_;
+        jsk_rviz_plugins::OverlayObject::Ptr overlay_;
+        bool is_msg_available_;
+        bool require_update_;
+        boost::mutex mutex_;
+        boost::circular_buffer<std::string> state_buf_;
+        cv::Mat generateGraphImage();
     };
 }
 

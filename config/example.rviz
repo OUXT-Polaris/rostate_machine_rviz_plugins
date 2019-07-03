@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RostateMachineViewerDisplay1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz/Selection
@@ -60,6 +59,9 @@ Visualization Manager:
       Name: RostateMachineViewerDisplay
       State Topic: /example_state_machine_node/current_state
       Value: true
+      alpha: 0.800000011920929
+      left: 128
+      top: 128
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48

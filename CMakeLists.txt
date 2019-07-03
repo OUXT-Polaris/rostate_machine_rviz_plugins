@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   jsk_rviz_plugins
 )
 
+find_package(OpenCV REQUIRED)
+
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS roscpp rostate_machine rviz jsk_rviz_plugins
@@ -18,6 +20,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -47,7 +50,7 @@ set(HEADER_FILES
 )
 
 add_library(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} )
 
 foreach(dir launch config)
   install(DIRECTORY ${dir}/
