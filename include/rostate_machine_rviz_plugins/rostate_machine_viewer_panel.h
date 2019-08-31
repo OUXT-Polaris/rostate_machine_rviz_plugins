@@ -36,6 +36,10 @@
 // Headers in Boost
 #include <boost/thread.hpp>
 #include <boost/optional.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 namespace rostate_machine_rviz_plugins
 {
@@ -65,6 +69,7 @@ namespace rostate_machine_rviz_plugins
         std::string dot_string_;
         std::mutex mtx_;
         boost::optional<QImage> dot_image_;
+        std::string uuid_string_;
     };
 }
 

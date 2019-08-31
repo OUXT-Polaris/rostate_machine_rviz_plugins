@@ -11,10 +11,12 @@
 
 #include <rostate_machine_rviz_plugins/rostate_machine_viewer_panel.h>
 
+// Headers in Qt
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPainter>
 
 #include <memory>
 
@@ -22,6 +24,7 @@ namespace rostate_machine_rviz_plugins
 {
     RostateMachineViewerPanel::RostateMachineViewerPanel(QWidget* parent)
     {
+        uuid_string_ = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
         QVBoxLayout* layout = new QVBoxLayout;
 
         QHBoxLayout* topic_layout = new QHBoxLayout;
@@ -36,25 +39,10 @@ namespace rostate_machine_rviz_plugins
         state_view_layout->addWidget(new QLabel("State"));
         layout->addLayout(state_view_layout);
 
+        updateTopic(state_topic_combo_.currentText());
+
         setLayout(layout);
         connect(&state_topic_combo_, SIGNAL(activated(QString)), this, SLOT(updateTopic(QString)));
-        
-        view_update_thread_ = boost::thread(&RostateMachineViewerPanel::updateStateView, this);
-    }
-
-    void RostateMachineViewerPanel::updateStateView()
-    {
-        ros::Rate rate(20);
-        while(ros::ok())
-        {
-            if(dot_image_)
-            {
-                //mtx_.lock();
-                state_view_.setScene(&Scene_);
-                //mtx_.unlock();
-            }
-            rate.sleep();
-        }
     }
 
     QStringList RostateMachineViewerPanel::updateTopicInfo()
@@ -120,18 +108,22 @@ namespace rostate_machine_rviz_plugins
 
     void RostateMachineViewerPanel::dotStringCallback(const std_msgs::String::ConstPtr msg)
     {
-        ROS_ERROR_STREAM("hi");
         //mtx_.lock();
         dot_string_ = msg->data;
-        std::ofstream outputfile("output.dot");
+        std::ofstream outputfile("log/"+uuid_string_+".dot");
         outputfile << dot_string_;
         outputfile.close();
-        std::system("dot -T png -o output.png output.dot");
+        std::string cmd = "dot -T png -o log/"+uuid_string_+".png log/"+uuid_string_+".dot";
+        std::system(cmd.c_str());
         QImage img;
-        bool result = img.load("output.png");
+        bool result = img.load(QString::fromStdString("log/"+uuid_string_+".png"));
         if(result)
         {
             dot_image_ = img;
+            state_view_.setScene(&Scene_);
+            Scene_.clear();
+            QPixmap pixmap=QPixmap::fromImage(img);
+            Scene_.addPixmap(pixmap);
         }
         //mtx_.unlock();
     }

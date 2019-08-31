@@ -7,14 +7,13 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rostate_machine
   rviz
-  jsk_rviz_plugins
 )
 
 find_package(OpenCV REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp rostate_machine rviz jsk_rviz_plugins
+  CATKIN_DEPENDS roscpp rostate_machine rviz
 )
 
 include_directories(
@@ -41,12 +40,10 @@ add_definitions(-DQT_NO_KEYWORDS)
 
 set(SRC_FILES
   src/rostate_machine_viewer_panel.cpp
-  src/rostate_machine_viewer_display.cpp
 )
 
 set(HEADER_FILES
   include/rostate_machine_rviz_plugins/rostate_machine_viewer_panel.h
-  include/rostate_machine_rviz_plugins/rostate_machine_viewer_display.h
 )
 
 add_library(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
