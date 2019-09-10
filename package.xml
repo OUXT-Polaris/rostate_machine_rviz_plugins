@@ -14,17 +14,20 @@
   <build_depend>rviz</build_depend>
   <build_depend>graphviz</build_depend>
   <build_depend>graphviz-dev</build_depend>
+  <build_depend>cv_bridge</build_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rostate_machine</build_export_depend>
   <build_export_depend>rviz</build_export_depend>
   <build_export_depend>graphviz</build_export_depend>
   <build_export_depend>graphviz-dev</build_export_depend>
+  <build_export_depend>cv_bridge</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rostate_machine</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>graphviz</exec_depend>
   <exec_depend>graphviz-dev</exec_depend>
   <exec_depend>rosdoc_lite</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
